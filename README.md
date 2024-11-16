@@ -1,4 +1,4 @@
-# Box Searching simulation
+# 📦🔍 Box Searching simulation
 
 > Eight boxes are filled with two coins, where all boxes have equal
 probability to have a coin. Alice searches the boxes left to right,
