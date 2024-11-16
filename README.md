@@ -14,7 +14,12 @@ Are Alice and Bob equally likely to win?
 > -----------------
 > ```
 
-This problem is not inherently paradoxical, but it might feel paradoxical at first glance due to our intuitive assumptions about symmetry and fairness. Here's a breakdown:
+One could argue that if at least one coin is located in the top row, Alice
+has an edge over Bob. If all coins are in the second row, Bob has an edge over
+alice. Since the distribution of coins is uniform, they might have equal chance.
+
+This is incorrect, which might feel paradoxical at first glance due to our
+intuitive assumptions about symmetry and fairness. Here's a breakdown:
 
 1. **Symmetry Intuition:**
   At first glance, Alice and Bob seem to have symmetric roles. Both are searching for coins in the same grid, with the same probabilities assigned to each box containing a coin.
