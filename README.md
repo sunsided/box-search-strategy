@@ -16,8 +16,6 @@ Are Alice and Bob equally likely to win?
 
 This problem is not inherently paradoxical, but it might feel paradoxical at first glance due to our intuitive assumptions about symmetry and fairness. Here's a breakdown:
 
-**Why it might seem paradoxical:**
-
 1. **Symmetry Intuition:**
   At first glance, Alice and Bob seem to have symmetric roles. Both are searching for coins in the same grid, with the same probabilities assigned to each box containing a coin.
   Symmetry often leads us to expect equal chances of success, but the search order introduces an asymmetry in their strategies.
@@ -26,15 +24,14 @@ This problem is not inherently paradoxical, but it might feel paradoxical at fir
 3. **Dependence of Outcomes:**
   If the coins are distributed probabilistically, the interaction between Alice's and Bob's traversal paths can create non-uniform probabilities for who finds a coin first, leading to unexpected results.
 
-**Why it's ultimately straightforward:**
-
 The outcome is not actually paradoxical as it is fully determined by
 * The distribution of coins in the grid.
 * The deterministic traversal strategies of Alice and Bob.
 
 ## Simulation output
 
-Here's the example output of the simulation:
+Here's the example output of the simulation for Alice (row-wise search order),
+Bob (column-wise search order) and Charlie (random order with uniform distribution):
 
 ```text
 Outcome after for 2 rows, 8 columns, 2 coins (100000 trials)
