@@ -38,19 +38,24 @@ Here's the example output of the simulation:
 
 ```text
 Outcome after for 2 rows, 8 columns, 2 coins (100000 trials)
-  row-wise wins:    50984 (60.43%)
-  column-wise wins: 33383 (39.57%)
-  ties:             15633 (18.53%)
+  row-wise wins:     46886 (37.76%)
+  column-wise wins:  33631 (27.09%)
+  random-order wins: 43641 (35.15%)
 Outcome after for 8 rows, 2 columns, 2 coins (100000 trials)
-  row-wise wins:    33516 (39.77%)
-  column-wise wins: 50759 (60.23%)
-  ties:             15725 (18.66%)
+  row-wise wins:     33508 (26.97%)
+  column-wise wins:  46577 (37.49%)
+  random-order wins: 44157 (35.54%)
 Outcome after for 8 rows, 8 columns, 2 coins (100000 trials)
-  row-wise wins:    44579 (50.16%)
-  column-wise wins: 44288 (49.84%)
-  ties:             11133 (12.53%)
+  row-wise wins:     36488 (33.29%)
+  column-wise wins:  36507 (33.31%)
+  random-order wins: 36599 (33.40%)
 Outcome after for 8 rows, 8 columns, 4 coins (100000 trials)
-  row-wise wins:    43195 (49.82%)
-  column-wise wins: 43500 (50.18%)
-  ties:             13305 (15.35%)
+  row-wise wins:     38292 (33.50%)
+  column-wise wins:  37917 (33.17%)
+  random-order wins: 38088 (33.32%)
 ```
+
+From this we find that searching along the longest dimension has an edge
+over searching along the shortest dimension. We also find that a randomized search
+appears to be on par with the optimal directional strategy for the according
+grid layout. This is because the coin distribution is randomized as well.

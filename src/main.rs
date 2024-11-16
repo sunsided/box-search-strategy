@@ -17,6 +17,7 @@
 use std::fmt::{Display, Formatter};
 use std::ops::Deref;
 use rand::{thread_rng, Rng};
+use rand::seq::SliceRandom;
 
 fn main() {
     // Default experiment (wider than high, two coins)
@@ -57,6 +58,7 @@ impl Experiment {
     pub fn run(&self) {
         let mut alice_wins = 0;
         let mut bob_wins = 0;
+        let mut charlie_wins = 0;
 
         for _ in 0..self.trials {
             let boxes = Stack::new(self.rows, self.columns, self.coins);
@@ -64,20 +66,28 @@ impl Experiment {
             // Run both search strategies.
             let alice = boxes.iter_rowwise().position(|b| b.is_coin()).unwrap_or(usize::MAX);
             let bob = boxes.iter_colwise().position(|b| b.is_coin()).unwrap_or(usize::MAX);
+            let charlie = boxes.iter_random().position(|b| b.is_coin()).unwrap_or(usize::MAX);
 
-            if alice < bob {
+            // Find smallest.
+            let smallest = alice.min(bob).min(charlie);
+
+            if alice == smallest {
                 alice_wins += 1;
-            } else if bob < alice {
+            }
+            if bob == smallest {
                 bob_wins += 1;
+            }
+            if charlie == smallest {
+                charlie_wins += 1;
             }
         }
 
-        let ties = self.trials - (alice_wins + bob_wins);
+        let total_wins = alice_wins + bob_wins + charlie_wins;
 
         println!("Outcome after for {} rows, {} columns, {} coins ({} trials)", self.rows, self.columns, self.coins, self.trials);
-        println!("  row-wise wins:    {alice_wins} ({:.2}%)", 100.0 * alice_wins as f64 / (alice_wins as f64 + bob_wins as f64));
-        println!("  column-wise wins: {bob_wins} ({:.2}%)", 100.0 * bob_wins as f64 / (alice_wins as f64 + bob_wins as f64));
-        println!("  ties:             {ties} ({:.2}%)", 100.0 * ties as f64 / (alice_wins as f64 + bob_wins as f64));
+        println!("  row-wise wins:     {alice_wins} ({:.2}%)", 100.0 * alice_wins as f64 / (total_wins as f64));
+        println!("  column-wise wins:  {bob_wins} ({:.2}%)", 100.0 * bob_wins as f64 / (total_wins as f64));
+        println!("  random-order wins: {charlie_wins} ({:.2}%)", 100.0 * charlie_wins as f64 / (total_wins as f64));
     }
 }
 
@@ -116,6 +126,12 @@ impl Stack {
 
     pub fn iter_colwise(&self) -> ColumnwiseIterator {
         ColumnwiseIterator { row: 0, column: 0, stack: self }
+    }
+
+    pub fn iter_random(&self) -> RandomIterator {
+        let mut remaining: Vec<usize> = (0..(self.rows * self.columns)).collect();
+        remaining.shuffle(&mut thread_rng());
+        RandomIterator { stack: self, remaining  }
     }
 
     fn stack_boxes(rows: usize, columns: usize, mut num_coins: usize) -> Vec<Box> {
@@ -195,6 +211,11 @@ struct ColumnwiseIterator<'a> {
     column: usize
 }
 
+struct RandomIterator<'a> {
+    stack: &'a Stack,
+    remaining: Vec<usize>
+}
+
 impl<'a> Iterator for RowwiseIterator<'a> {
     type Item = BoxAt;
 
@@ -216,7 +237,6 @@ impl<'a> Iterator for RowwiseIterator<'a> {
     }
 }
 
-
 impl<'a> Iterator for ColumnwiseIterator<'a> {
     type Item = BoxAt;
 
@@ -235,5 +255,24 @@ impl<'a> Iterator for ColumnwiseIterator<'a> {
         }
 
         Some(b)
+    }
+}
+
+impl<'a> Iterator for RandomIterator<'a> {
+    type Item = BoxAt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self.remaining.pop() {
+            None => None,
+            Some(index) => {
+                let row = index / self.stack.columns;
+                let column = index % self.stack.columns;
+
+                let b = self.stack.box_at(row, column);
+                let b = BoxAt { row, column , b };
+
+                Some(b)
+            }
+        }
     }
 }
